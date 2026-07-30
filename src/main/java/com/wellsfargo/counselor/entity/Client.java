@@ -6,20 +6,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "advisors")
-public class Advisor {
+@Table(name = "clients")
+public class Client {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long advisorId;
+    private Long clientId;
 
     @Column(nullable = false)
     private String firstName;
@@ -36,9 +33,12 @@ public class Advisor {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @OneToMany(mappedBy = "advisor",
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "advisor_id", nullable = false)
+    private Advisor advisor;
+
+    @OneToOne(mappedBy = "client",
             cascade = CascadeType.ALL,
             orphanRemoval = true)
-    private List<Client> clients = new ArrayList<>();
-    //i did new ArrayList becx to avoid NullPointerException
+    private Portfolio portfolio;
 }
